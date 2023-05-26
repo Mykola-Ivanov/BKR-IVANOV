@@ -9,51 +9,77 @@
 <body>
 <h1>plot page</h1>
 <div style="height: 100;width: 200;">
-    <canvas id="myChart" width="200" height="100"></canvas>
+    <canvas id="temperatureChart" width="200" height="100"></canvas>
+</div>
+<div style="height: 100;width: 200;">
+  <canvas id="humidityChart" width="200" height="100"></canvas>
+</div>
+<div style="height: 100;width: 200;">
+  <canvas id="pressureChart" width="200" height="100"></canvas>
 </div>
 </body>
-<script>
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
+<script type="application/javascript">
+    var temperatureChartContext = document.getElementById('temperatureChart').getContext('2d');
+    var humidityChartContext = document.getElementById('humidityChart').getContext('2d');
+    var pressureChartContext = document.getElementById('pressureChart').getContext('2d');
+    var temperatureChart = new Chart(temperatureChartContext, {
       type: 'line',
       data: {
         labels: [], // масив міток
         datasets: [{
-          label: 'My dataset',
+          label: 'Температура (°C)',
           data: [], // масив даних
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
-          borderColor: 'rgba(255, 99, 132, 1)',
-          borderWidth: 1
+          backgroundColor: 'rgba(255, 20, 30, 0.2)',
+          borderColor: 'rgba(12, 2, 2, 1)',
+          borderWidth: 2
         }]
-      },
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            }
-          }]
-        }
+      }
+    });
+    var humidityChart = new Chart(humidityChartContext, {
+      type: 'line',
+      data: {
+        labels: [], // масив міток
+        datasets: [{
+          label: 'Вологість (%)',
+          data: [], // масив даних
+          backgroundColor: 'rgba(20, 20, 200, 0.2)',
+          borderColor: 'rgba(12, 2, 2, 1)',
+          borderWidth: 2
+        }]
+      }
+    });
+    var pressureChart = new Chart(pressureChartContext, {
+      type: 'line',
+      data: {
+        labels: [], // масив міток
+        datasets: [{
+          label: 'Тиск (мм рт. ст.)',
+          data: [], // масив даних
+          backgroundColor: 'rgba(220, 200, 233, 0.2)',
+          borderColor: 'rgba(12, 2, 2, 1)',
+          borderWidth: 2
+        }]
       }
     });
   
     // Оновлюємо графік
-    function updateChart(data) {
-      myChart.data.labels.push(data.label);
-      myChart.data.datasets.forEach((dataset) => {
-        dataset.data.push(data.value);
-      });
+    function updateCharts(data) {
       if(myChart.data.labels.length>10){
         myChart.data.labels.shift();
         myChart.data.labels.shift();
         myChart.data.datasets.forEach((dataset) => {
-            dataset.data.shift();
+            dataset.data.shift(data.value);
           });
       }
+      myChart.data.labels.push(data.label);
+      myChart.data.datasets.forEach((dataset) => {
+        dataset.data.push(data.value);
+      });
+      
       myChart.update();
     }
   
-    // Додавання нових даних кожні 5 секунд
+    // Додавання нових даних кожні 0.5 секунди
     setInterval(() => {
       // Отримання нових даних з сервера
       fetch('/dataget')
@@ -62,7 +88,7 @@
           // Оновлюємо графік з новими даними
           updateChart(data);
         });
-    }, 2000);
+    }, 500);
   </script>
   
   
