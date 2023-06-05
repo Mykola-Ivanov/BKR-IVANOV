@@ -41,9 +41,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/climate")
 public class ClimateDataController {
     ClimateDataService service;
-    Environment environment;
-    @Autowired
-    @Qualifier("ipbean")
     String picowip;
     @Autowired
     public ClimateDataController(ClimateDataService service,Environment env) {
@@ -81,27 +78,6 @@ public class ClimateDataController {
         data.put("value", Math.random() * 100);
         return data;
     }
-    
-    @GetMapping("/setpoint/{t}/{h}")
-    public void setTemperaturePoint(@PathVariable("t") float temperatureSetPoint,@PathVariable("h") float humiditySetPoint){
-        
-        String url = "http://"+picowip+":8888/settargetclimate";
-        //"example.com/api/endpoint";
-        String jsonBody = "{\"temperature\": \""+temperatureSetPoint+"\", \"humidity\": "+humiditySetPoint+"}";
-
-        // Створюємо об'єкт RestTemplate
-        RestTemplate restTemplate = new RestTemplate();
-        
-        // Створюємо заголовки і встановлюємо Content-Type
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setContentLength(jsonBody.getBytes().length);
-
-        // Створюємо об'єкт HttpEntity з JSON-об'єктом та заголовками
-        HttpEntity<String> requestEntity = new HttpEntity<>(jsonBody, headers);
-
-        // Відправляємо PUT-запит і отримуємо відповідь
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
 
         // Отримуємо відповідь
         String response = responseEntity.getBody();

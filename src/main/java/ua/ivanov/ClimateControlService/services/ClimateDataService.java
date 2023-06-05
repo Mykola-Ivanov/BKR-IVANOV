@@ -7,13 +7,10 @@ import org.springframework.stereotype.Service;
 import ua.ivanov.ClimateControlService.models.ClimateData;
 import ua.ivanov.ClimateControlService.repositories.ClimateDataRepository;
 
-//import java.sql.Timestamp;
-//import java.util.List;//@Transactional(readOnly = true)
 
 @Service
 public class ClimateDataService {
 
-    private final ClimateDataRepository climateDataRepository;
     @Autowired
     public ClimateDataService(ClimateDataRepository climateDataRepository) {
         this.climateDataRepository = climateDataRepository;
