@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <style type="text/css">
+            label {
+                display: inline-block;
+                width: 200px;
+                margin: 5px;
+                text-align: left;
+            }
+            input[type=text], input[type=password], select {
+                display: inline-block;
+                width: 200px;
+            }
+            input[type=radio] {
+                margin-left: 45px;
+            }
+            input[type=checkbox] {
+                margin-right: 190px;
+            }  
+            button {
+                padding: 5px;
+                margin: 10px;
+            }
+        </style>
+        <div th:insert="head :: headincludes">  </div>
+        <title>Сворення кліматичного профілю</title>
+    </head>
+    <body>
+        <h1>new Climate Profile</h1>
+        <form action="#" th:action="@{/profile/add}" th:method="post" th:object="${newprofile}">
+            <label for="profilename">Назва профілю</label>
+            <input id="profilename" type="text" th:field="*{climateProfileName}"/>
+            <button type="submit">Зберегти</button>
+        </form>
+        <div th:insert="footer :: footer">  </div>
+    </body>
+</html>

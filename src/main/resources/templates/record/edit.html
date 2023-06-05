@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <head>
+            <link rel="stylesheet" type="text/css" th:href="@{/css/climateprofileindex.css}" />
+            <div th:insert="head :: headincludes">  </div>
+        </head>
+    </head>
+    <body>
+    <div th:insert="navbar :: navbar">  </div>
+    <div class="main-wrap container">
+        <table class="table table-light">
+            <!--
+                <caption style="text-align:right" th:text="${profileToAddRecord.climateProfileName}"></caption>
+            -->
+            <thead>
+                <tr>                  
+                  <th scope="col" class="table-header">Цільова температура</th>
+                  <th scope="col" class="table-header">Цільова вологість</th>
+                  <th scope="col" class="table-header">Час початку</th>
+                </tr>
+              </thead>
+            <tbody>
+                <tr class="profile-record" >
+                    <form action="#" th:action="@{/record/edit/{profId}(profId=${profileId})}" th:method="patch" th:object="${editRecord}">
+                        <input id="profileRecordId" type="hidden" th:field="*{climateProfileRecordId}"/>
+                        <td class="profile-data-cell">
+                            <input id="profileRecordTemp" type="number" th:field="*{targetTemperature}"/>
+                        </td>
+                        <td class="profile-data-cell">
+                            <input id="profileRecordhumid" type="number" th:field="*{targetHumidity}"/>
+                        </td>
+                        <td class="profile-data-cell">
+                            <input id="profileRecordStart" type="time" th:field="*{startTime}"/>
+                        </td>
+                        
+                        <td class="profile-data-cell">
+                            <button type="submit">Зберегти</button>
+                        </td>
+                    </form>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:insert="footer :: footer">  </div>
+    </body>
+</html>

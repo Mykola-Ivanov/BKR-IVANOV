@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Графіки</title>
+    <link rel="stylesheet" th:href="@{/css/climateplot.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div th:insert="head :: headincludes">  </div>
+</head>
+<body th:onload="startup([[${xTime}]],[[${temperature}]],[[${humidity}]],[[${pressure}]])">
+    <div th:insert="navbar :: navbar">  </div>
+    <div class="container main-wrap">
+        
+        <div class="realtime-graphs-title"><h1>Графіки клімату</h1></div>
+        <div class="wrap-warap">
+          <div class="chart-wraper">
+              <canvas id="temperatureChart"></canvas>
+          </div>
+          <div class="chart-wraper">
+              <canvas id="humidityChart"></canvas>
+          </div>    
+          <div class="chart-wraper">
+              <canvas id="pressureChart"></canvas>
+          </div>
+      </div>
+    </div>
+    <div th:insert="footer :: footer">  </div>
+    <script th:inline="javascript" type="application/javascript" th:src="@{/js/dynamicplot.js}">
+        
+    </script>
+</body>
+</html>

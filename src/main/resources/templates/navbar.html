@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Навігаційна панель</title>
+    
+</head>
+<body>
+
+<nav th:fragment="navbar" class="navbar navbar-expand-md bg-dark navbar-dark">
+    <div class="container-fluid bg-dark">
+        <div class="navbar-header">
+            <p class="navbar-brand">Cистема контролю клімату</p>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a class="nav-link" th:href="@{/climate/plot}">Графіки клімату</a></li>
+
+            <li><a class="nav-link" th:href="@{/profile}">Кліматичні профілі</a></li>
+        </ul>
+    </div>    
+</nav>
+
+</body>
+</html>

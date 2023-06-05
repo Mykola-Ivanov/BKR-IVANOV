@@ -2,8 +2,12 @@ package ua.ivanov.ClimateControlService;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication(scanBasePackages = {"ua.ivanov"})
+@SpringBootApplication
+@EnableScheduling
+@EnableAsync
 public class ClimateControlServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ClimateControlServiceApplication.class, args);

@@ -1,59 +1,58 @@
 package ua.ivanov.ClimateControlService.models;
 
-//import javax.persistence.*;
-//import javax.persistence.Entity;
-import jakarta.persistence.*;
+import java.sql.Date;
+import java.sql.Time;
 
-/*import javax.persistence.Id;
-import javax.persistence.Column;
-import javax.persistence.Basic;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;*/
-import java.sql.Timestamp;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 
-@Table(name = "climatedata")
+
+@Table(name = "climate_data")
 @Entity
 public class ClimateData {
     @Id
-    //@GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "climate_data_id")
     private Integer id;
 
-    @Basic(optional = false)
     @Column(name = "temperature")
     private float temperature;
-
-    @Basic(optional = false)
+    
     @Column(name = "humidity")
     private float humidity;
 
-    @Basic(optional = false)
-    @Column(name = "target_temperature")
-    private float targettemperature;
+    @Column(name = "pressure")
+    private float pressure;
 
-    @Basic(optional = false)
-    @Column(name = "target_humidity")
-    private float targethumidity;
+    @Column(name = "data_date")
+    public Date registrationDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "data_time_stamp")
-    private Timestamp registrationdata;
-    public ClimateData(){}
+    @Column(name = "data_time")
+    private Time registratiomTime;
 
-    public ClimateData(float temperature, float humidity, float targettemperature, float targethumidity) {
+
+    public ClimateData(float temperature, float humidity, float pressure, Date registrationDate,
+            Time registratiomTime) {
         this.temperature = temperature;
         this.humidity = humidity;
-        this.targettemperature = targettemperature;
-        this.targethumidity = targethumidity;
+        this.pressure = pressure;
+        this.registrationDate = registrationDate;
+        this.registratiomTime = registratiomTime;
     }
 
-    public int getId() {
+    public ClimateData() {
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -73,39 +72,28 @@ public class ClimateData {
         this.humidity = humidity;
     }
 
-    public float getTargettemperature() {
-        return targettemperature;
+    public float getPressure() {
+        return pressure;
     }
 
-    public void setTargettemperature(float targettemperature) {
-        this.targettemperature = targettemperature;
+    public void setPressure(float pressure) {
+        this.pressure = pressure;
     }
 
-    public float getTargethumidity() {
-        return targethumidity;
+    public Date getRegistrationDate() {
+        return registrationDate;
     }
 
-    public void setTargethumidity(float targethumidity) {
-        this.targethumidity = targethumidity;
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
-    public Timestamp getRegistrationdata() {
-        return registrationdata;
+    public Time getRegistratiomTime() {
+        return registratiomTime;
     }
 
-    @Override
-    public String toString() {
-        return "ClimateData{" +
-                "temperature=" + temperature +
-                ", humidity=" + humidity +
-                ", targettemperature=" + targettemperature +
-                ", targethumidity=" + targethumidity +
-                ", registrationdata=" + registrationdata +
-                '}';
-    }
-
-    public void setRegistrationdata(Timestamp registrationdata) {
-        this.registrationdata = registrationdata;
+    public void setRegistratiomTime(Time registratiomTime) {
+        this.registratiomTime = registratiomTime;
     }
 
 }

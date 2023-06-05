@@ -1,1 +1,2 @@
-SELECT * from climatedatabase.climatedata;
+SELECT * FROM climatedatabase.climate_data;
+DELETE * FROM climatedatabase.climate_data;

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <head>
+            <link rel="stylesheet" type="text/css" th:href="@{/css/climateprofileindex.css}" />
+            <div th:insert="head :: headincludes">  </div>
+        </head>
+    </head>
+    <body>
+    <div th:insert="navbar :: navbar">  </div>
+    <div class="main-wrap container">
+        <table class="table table-light">
+            <caption style="text-align:right" th:text="${profile.climateProfileName}"></caption>
+            <thead>
+                <tr>                  
+                  <th scope="col" class="table-header">Цільова температура</th>
+                  <th scope="col" class="table-header">Цільова вологість</th>
+                  <th scope="col" class="table-header">Час початку</th>
+                  <th scope="col" class="table-header">Дії</th>
+                </tr>
+              </thead>
+            <tbody>
+                <tr class="profile-record" th:each="record: ${records}">
+                    <td class="profile-data-cell">
+                        <span th:text="${record.targetTemperature}"></span>
+                    </td>
+                    <td class="profile-data-cell">
+                        <span th:text="${record.targetHumidity}"></span>
+                    </td>
+                    <td class="profile-data-cell">
+                        <span th:text="${record.startTime}"></span>
+                    </td>
+                    <!--
+                    <td class="profile-data-cell">
+                        <span th:text="${record.endTime}"></span>
+                    </td>
+                    
+                        дії над записом
+                    -->
+                    <td class="link-wrapper">
+                        <form action="#" th:action="@{/record/edit/{id}(id=${record.climateProfileRecordId})}" th:method="get">
+                            <button class="btn btn-outline-secondary" type="submit"><i class="fa fa-pen" ></i>Перейменувати</button>
+                        </form>
+                    </td>
+                    <td class="link-wrapper">
+                        <form action="#" th:action="@{/record/delete/{profileId}/{id}(profileId=${profile.climateProfileId},id=${record.climateProfileRecordId})}" th:method="delete">
+                            <button class="btn btn-outline-secondary" type="submit"><i class="fa fa-trash" ></i> Видалити</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr class="profile-record">
+                    <td class="profile-data-cell">
+                        <i class="fa fa-plus profile-link"></i>
+                        <a th:href="@{/record/new/{id}((id=${profile.climateProfileId}))}" >Додати</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:insert="footer :: footer">  </div>
+    </body>
+</html>

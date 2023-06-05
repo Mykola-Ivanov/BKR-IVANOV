@@ -9,6 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import ua.ivanov.ClimateControlService.utilities.NetworkScan;
 
@@ -18,13 +20,11 @@ import ua.ivanov.ClimateControlService.utilities.NetworkScan;
 class MyConfiguration{
     @Autowired
     Environment env;
-    @Value("${scan.send.picow.address}")
-    String picowIP;
-    @Bean(name = "ipbean")
-    public String picowbean(){
+    
+    @Bean
+    public String picowip(){
         String ip = "255.255.255.255";
         try {
-            System.out.println(picowIP);
             String broadcastaddress=env.getProperty("scan.send.broadcast.address");
             int buffersize = Integer.parseInt(env.getProperty("scan.recieve.buffersize"));
             String message=env.getProperty("scan.send.broadcast.message");
@@ -33,7 +33,6 @@ class MyConfiguration{
 			ip = scan.message();
 			System.out.println(ip);
 			
-            picowIP = ip;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

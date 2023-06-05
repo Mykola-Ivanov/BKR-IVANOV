@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/climateprofileindex.css}" />
+        <div th:insert="head :: headincludes">  </div>
+    </head>
+    <body>
+        <div th:insert="navbar :: navbar">  </div>
+        <div class="main-wrap"></div>
+        <h1>Кліматичні профілі</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Назва профілю</th>
+                    <th scope="col">Статус профілю</th>
+                    <th scope="col">Дії</th>
+                </tr>
+            </thead>
+            <tbody class="table-striped">
+                <tr  th:each="profile: ${profiles}">
+                    <td class="link-wrapper">
+                        <a class="profile-link btn btn-outline-secondary" th:href="@{/profile/view/{id}(id=${profile.climateProfileId})}" th:text="${profile.climateProfileName}"></a>
+                    </td>
+                    <td>
+                        <span th:if="${profile.selected == true}">Встановлено</span>
+                        <span th:if="${profile.selected == false}"></span>
+                    </td>
+                    <td class="link-wrapper">
+                        <form action="#" th:action="@{/profile/rename/{id}(id=${profile.climateProfileId})}" th:method="get">
+                            <button class="btn btn-outline-secondary" type="submit"><i class="fa fa-pen" ></i>Перейменувати</button>
+                        </form>
+                    </td>
+                    <td class="link-wrapper">
+                        <form action="#" th:action="@{/profile/setup/{id}(id=${profile.climateProfileId})}" th:method="patch">
+                            <button class="btn btn-outline-secondary" type="submit"><i class="fa fa-cog" ></i>Встановити</button>
+                        </form>
+                    </td>
+                    <td class="link-wrapper">
+                        <form action="#" th:action="@{/profile/deleteprofile/{id}(id=${profile.climateProfileId})}" th:method="delete">
+                            <button class="btn btn-outline-secondary" type="submit"><i class="fa fa-trash" ></i> Видалити</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="link-wrapper btn btn-outline-secondary"><i class="fa fa-plus profile-link"></i><a th:href="@{/profile/new}" >Створити</a></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div th:insert="footer :: footer">  </div>
+    </body>
+</html>

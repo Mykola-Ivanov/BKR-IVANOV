@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <head>
+            <link rel="stylesheet" type="text/css" th:href="@{/css/climateprofileindex.css}" />
+            <div th:insert="head :: headincludes">  </div>
+        </head>
+    </head>
+    <body>
+    <div th:insert="navbar :: navbar">  </div>
+    <div class="main-wrap container">
+        <form action="#" th:action="@{/profile/rename}" th:method="patch" th:object="${profileToRename}">
+            <input id="profileid" type="hidden" th:field="*{climateProfileId}"/>
+            <input id="profileselected" type="hidden" th:field="*{selected}"/>
+            <label for="profilename">Нова назва профілю</label>
+            <input id="profilename" type="text" th:field="*{climateProfileName}"/>
+            <button class="btn btn-outline-secondary" type="submit">Зберегти</button>
+        </form>
+    </div>
+    <div th:insert="footer :: footer">  </div>
+    </body>
+</html>

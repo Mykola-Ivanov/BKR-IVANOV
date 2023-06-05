@@ -32,12 +32,12 @@ public class NetworkScan {
         String ip = "";
         
         DatagramSocket socket;
-        socket = new DatagramSocket(8888);
+        socket = new DatagramSocket(8080);
         socket.setBroadcast(true);
         
         //створення пакеу для широкомовного запиту в мережі
         sendPacket = new DatagramPacket(sendMessage.getBytes(), sendMessage.getBytes().length,
-            InetAddress.getByName(networkBroadcastAdress),8888);
+            InetAddress.getByName(networkBroadcastAdress),8080);
         //відправлення запиту
         socket.send(sendPacket);
 

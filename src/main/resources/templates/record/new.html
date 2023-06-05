@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <head>
+            <link rel="stylesheet" type="text/css" th:href="@{/css/climateprofileindex.css}" />
+            <div th:insert="head :: headincludes">  </div>
+        </head>
+    </head>
+    <body>
+    <div th:insert="navbar :: navbar">  </div>
+    <div class="main-wrap container">
+        <table class="table table-light">
+            <caption style="text-align:right" th:text="${profileToAddRecord.climateProfileName}"></caption>
+            <thead>
+                <tr>                  
+                  <th scope="col" class="table-header">Цільва температура</th>
+                  <th scope="col" class="table-header">Цільова вологість</th>
+                  <th scope="col" class="table-header">Час початку</th>
+                  <th scope="col" class="table-header">час кінця</th>
+                </tr>
+              </thead>
+            <tbody>
+                <tr class="profile-record" th:each="record: ${records}">
+                    <td class="profile-data-cell">
+                        <span th:text="${record.targetTemperature}"></span>
+                    </td>
+                    <td class="profile-data-cell">
+                        <span th:text="${record.targetHumidity}"></span>
+                    </td>
+                    <td class="profile-data-cell">
+                        <span th:text="${record.startTime}"></span>
+                    </td>
+                    <!--
+                        <td class="profile-data-cell">
+                            <span th:text="${record.endTime}"></span>
+                        </td>
+                    -->
+                    
+                </tr>
+                <tr class="profile-record" >
+                    <form action="#" th:action="@{/record/add/{id}(id=${profileToAddRecord.climateProfileId})}" th:method="post" th:object="${newRecord}">
+                        <td class="profile-data-cell">
+                            <input id="profilename" type="number" th:field="*{targetTemperature}"/>
+                        </td>
+                        <td class="profile-data-cell">
+                            <input id="profilename" type="number" th:field="*{targetHumidity}"/>
+                        </td>
+                        <td class="profile-data-cell">
+                            <input id="profilename" type="time" th:field="*{startTime}"/>
+                        </td>
+                        <td class="profile-data-cell">
+                            <input id="profilename" type="hidden" th:field="*{endTime}"/>
+                        </td>
+                        <button type="submit">Зберегти</button>
+                    </form>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:insert="footer :: footer">  </div>
+    </body>
+</html>

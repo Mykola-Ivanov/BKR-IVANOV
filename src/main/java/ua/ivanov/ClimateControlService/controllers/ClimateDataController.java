@@ -1,101 +1,105 @@
 package ua.ivanov.ClimateControlService.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import ua.ivanov.ClimateControlService.models.ClimateData;
-import ua.ivanov.ClimateControlService.services.ClimateDataService;
+import ua.ivanov.ClimateControlService.dto.ClimateDataPlotDTO;
+import ua.ivanov.ClimateControlService.models.*;
+import ua.ivanov.ClimateControlService.services.*;
 
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.SocketAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import org.springframework.http.HttpHeaders;
-
-import org.springframework.web.bind.annotation.RequestParam;
-
+import java.sql.Date;
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Collections;
 
 @Controller
 @RequestMapping("/climate")
 public class ClimateDataController {
     ClimateDataService service;
     String picowip;
+    
+    
+    public ClimateDataController() {
+    }
     @Autowired
-    public ClimateDataController(ClimateDataService service,Environment env) {
+    public ClimateDataController(ClimateDataService service, String picowip) {
         this.service = service;
-        this.environment = env;
+        this.picowip = picowip;
     }
-    @ResponseBody
-    @PostMapping("/data")
-    public ResponseEntity<HttpStatus> getDataFromSystem(@RequestBody ClimateData data){
-        System.out.println(data.toString());
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
-    @ResponseBody
-    @GetMapping("/getdatetime")
-    public Map<String, Object> getTime(){
-        Map<String, Object> time = new HashMap<>();
-        Date date = new Date();
-        var timestamp = new Timestamp(date.getTime());
-        time.put("date",timestamp.getDate());
-        time.put("hours",timestamp.getHours());
-        time.put("minutes",timestamp.getMinutes());
-        time.put("seconds",timestamp.getSeconds());
-        return time; 
-    }
+    
     @GetMapping("")
     public String index(){
-        return "home";
+        return "redirect:/climate/plot";
     }
-    @GetMapping("/viewdata")
-    public Map<String, Object> getData() {
-        // Отримання даних для графіка
-        // Наприклад, з бази даних або з іншого джерела
-        Map<String, Object> data = new HashMap<>();
-        data.put("label",(new Timestamp(new Date().getTime())).toString());
-        data.put("value", Math.random() * 100);
+    @ResponseBody
+    @GetMapping("/getlast")
+    public ClimateData getData() {
+        // Отримання останнього запису
+        ClimateData data = service.getLast();
         return data;
     }
 
-        // Отримуємо відповідь
-        String response = responseEntity.getBody();
-
-        // Виводимо вміст відповіді
-        System.out.println("Response: " + response);
-        return ;
-    }
-
-    @PutMapping("/setclimateprofile")
-    public void setHumidityPoint(float humiditySetPoint){
-        
-        return ;
-    }
-
     @GetMapping(value="/plot")
-    public String getMethodName() {
-        return "plotdata";
+    public String getMethodName(Model model) {
+        var records = service.findLast20records();
+
+        var time = new ArrayList<String>();
+        var temperature = new ArrayList<Float>();
+        var humidity = new ArrayList<Float>();
+        var pressure = new ArrayList<Float>();
+        for (ClimateDataPlotDTO climateData : records) {
+            time.add( climateData.getRegistratiomTime());
+            temperature.add( climateData.getTemperature());
+            humidity.add(climateData.getHumidity());
+            pressure.add(climateData.getPressure());
+        }
+        Collections.reverse(time);
+        Collections.reverse(temperature);
+        Collections.reverse(humidity);
+        Collections.reverse(pressure);
+
+        model.addAttribute("xTime", time);
+        model.addAttribute("temperature", temperature);
+        model.addAttribute("humidity", humidity);
+        model.addAttribute("pressure", pressure);
+
+        return "climate/plotdata";
     }
-    
+
+    @PostMapping("/data")
+    public ResponseEntity<HttpStatus> getDataFromSystem(){
+        RestTemplate template = new RestTemplate(); 
+        // Створюємо заголовки і встановлюємо Content-Type
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        String uri = "http://"+picowip+":8080/getclimate";//    
+        System.out.println(uri);
+        ResponseEntity<ClimateData> responce = template.exchange(uri,HttpMethod.GET, null, ClimateData.class);
+        System.out.println(responce);
+        ClimateData data = responce.getBody();
+        if(data != null){
+            data.setRegistratiomTime(new Time(System.currentTimeMillis()));
+            data.setRegistrationDate(new Date(System.currentTimeMillis()));
+            service.save(data);
+            return ResponseEntity.ok(HttpStatus.OK);
+        }
+        else {
+            return ResponseEntity.ok(HttpStatus.NO_CONTENT);
+        }
+    }
+    // @ResponseBody
+    // @GetMapping("/getdatetime")
+    // public Map<String, Object> getTime(){
+    //     Map<String, Object> time = new HashMap<>();
+    //     java.util.Date date = new Date(System.currentTimeMillis());
+    //     DateFormat format = new SimpleDateFormat("HH:mm");
+    //     format.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
+    //     time.put("time",format.format(date)+":00");
+    //     return time; 
+    // }
 }
